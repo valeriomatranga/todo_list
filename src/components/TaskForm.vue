@@ -20,7 +20,7 @@ export default defineComponent({
   props: {
     task: {
       type: Object as () => Task,
-      default: () => ({ name: '', completed: false })
+      default: () => ({ name: '', completed: false, createdAt: new Date().toISOString() })
     }
   },
   emits: ['taskUpdated'],
@@ -42,9 +42,15 @@ export default defineComponent({
         taskStore.addTask(localTask.value)
       }
       emit('taskUpdated')
+
+      resetForm()
     }
 
-    return { localTask, handleSubmit }
+    const resetForm = () => {
+      localTask.value = { name: '', completed: false, createdAt: new Date().toISOString() }
+    }
+
+    return { localTask, handleSubmit, resetForm }
   }
 })
 </script>

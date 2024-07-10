@@ -12,11 +12,16 @@ export const useTaskStore = defineStore('task', {
       try {
         const response = await axios.get(`http://localhost:3000/tasks`)
 
+        // Ordina i task dal più recente al più vecchio
+        const sortedTasks = response.data.sort((a: Task, b: Task) => {
+          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        })
+
         const perPage = 5 // Numero di tasks per pagina
         const start = (page - 1) * perPage
         const end = page * perPage
 
-        this.tasks = response.data.slice(start, end)
+        this.tasks = sortedTasks.slice(start, end)
         this.totalTasks = response.data.length
       } catch (error) {
         console.error('Error function fetchTasks:', error)
